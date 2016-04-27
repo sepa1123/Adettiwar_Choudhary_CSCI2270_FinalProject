@@ -1,23 +1,43 @@
+#ifndef MAIL_H
+#define MAIL_H
 #include <iostream>
-#include <string.h>
 
 using namespace std;
 
-int main()
+struct mailservice{
+    std::string cityname;
+    std::string package;
+    mailservice * next;
+    mailservice * previous;
+
+
+    mailservice(){};
+
+    mailservice(std::string initName,mailservice *initNext,mailservice *initPrevious,std::string initpackage)
+    {
+        cityname = initName;
+        next = initNext;
+        previous = initPrevious;
+        package = initpackage;
+    }
+};
+
+class mail
 {
-  string name, address
-  cout<<"Please Enter your name: "<<endl;
-  cin>>name;
-  cout<<"Please Enter your address: "<<endl;
-  cin>>adress;
-  cout<<"Please enter your city: "endl;
-  cin >>city;
-  
- string cities[]={"Los Angeles", "Phoenix", "Denver", "Dallas", "St. Louis", "Chicago", "Atlanta", "Washington, D.C.", "New York", "Boston", "NULL"};
- 
+    public:
+        mail();
+        ~mail();
+        void build();
+        void track();
+        void addCity(std::string, std::string);
+        void ship(char *);
+        void printNetwork();
+    protected:
+    private:
+        mailservice *head;
+        mailservice *tail;
 
+};
 
-}
+#endif // MAIL_H
 
-//I want to test how this pull request stuff works.
-//This is from local to online into a branch.

@@ -1,5 +1,7 @@
 #include<iostream>
 #include "mail.h"
+#include <stdlib.h>
+#include <sstream>
 
 using namespace std;
 
@@ -89,6 +91,50 @@ void mail::build(){
     cout<<endl;
 }
 
+void mail::build2()
+{
+    mailservice *m1 = new mailservice;
+    m1->cityname = "Los Angeles";
+    m1->next = NULL;
+    m1->previous = NULL;
+    head2 = m1;
+
+
+    mailservice *m2 = new mailservice;
+    m2->cityname = "Denver";
+    m2->next = NULL;
+    m2->previous = m1;
+    m1->next = m2;
+
+    mailservice *m3 = new mailservice;
+    m3->cityname = "Dallas";
+    m3->next = NULL;
+    m3->previous = m2;
+    m2->next = m3;
+
+    mailservice *m4 = new mailservice;
+    m4->cityname = "Chicago";
+    m4->next = NULL;
+    m4->previous = m3;
+    m3->next = m4;
+
+    mailservice *m5 = new mailservice;
+    m5->cityname = "New York";
+    m5->next = NULL;
+    m5->previous = m4;
+    m4->next = m5;
+
+    cout<<"These our the roots we have for our one day shipping"<<endl;
+    mailservice * tmp = head;
+     while(tmp->next != NULL)
+        {
+            cout<<tmp->cityname<<" <-> ";
+            tmp = tmp->next;
+        }
+
+        cout<<endl;
+}
+
 void mail::addCity(std::string newCity, std::string previousCity)
 {
     mailservice *temps =head;
@@ -105,14 +151,6 @@ void mail::addCity(std::string newCity, std::string previousCity)
 
 }
 
-void mail::ship(char * ){
-
-}
-
-void mail::track(){
-
-}
-
 void mail::printNetwork(){
     cout<<"Route map for delivery"<<endl;
     cout<<"NULL <- ";
@@ -126,4 +164,128 @@ void mail::printNetwork(){
     cout<<temp->cityname<<" ->";
     cout<<"NULL"<<endl;
     cout<<"=================="<<endl;
+}
+
+void mail::deleteCity(string cityNameDelete)
+{
+    mailservice *delCity = NULL;
+    mailservice *searchCity = head;
+    bool found = false;
+    while(!found and searchCity != NULL){
+        if(searchCity->cityname == cityNameDelete){
+            found = true;
+        }else{
+            searchCity = searchCity->next;
+        }
+
+    }
+    if(found == true){
+        if(searchCity == head){
+            delCity = head;
+            head = head->next;
+            head->previous = NULL;
+            delete delCity;
+        }else{
+            searchCity->previous->next = searchCity->next;
+            searchCity->next->previous = searchCity->previous;
+            delete searchCity;
+        }
+    }else{
+        cout<<cityNameDelete<<"not found"<<endl;
+    }
+
+}
+
+void mail::deleteNetwork()
+{
+    mailservice* temps = head;
+    mailservice*temps2 = head->next;
+
+    while(temps != NULL)
+    {
+        cout<<temps->cityname<<" deleted"<<endl;
+        delete temps;
+        temps2 = temps->next;
+    }
+    cout<<temps->cityname<<" deleted"<<endl;
+    delete temps;
+    head = NULL;
+
+    cout<<"There is no network"<<endl;
+}
+
+void mail::costfast(string kind, int weight){
+    int cost;
+    if ( weight < 5 ){
+    cost = 15;
+    cout<<"Cost of your shipping is $"<<cost<<endl;
+    }
+    else if (weight >= 5 && kind == "paper"){
+        cost = weight*2 + 10;
+        cout<<"Cost of your shipping is $"<<cost<<endl;
+    }
+    else if (weight >= 5 && kind == "Metal"){
+        cost = weight*4 + 10;
+         cout<<"Cost of your shipping is $"<<cost<<endl;
+    }
+    else if (weight >= 10 && kind == "Misc"){
+    cost = weight*3 + 10;
+    cout<<"Cost of your shipping is $"<<cost<<endl;
+    }
+}
+
+void mail::costnormal(string kind, int weight){
+  int cost;
+    if ( weight < 5 ){
+    cost = 8;
+    cout<<"Cost of your shipping is $"<<cost<<endl;
+    }
+    else if (weight >= 5 && kind == "Paper"){
+        cost = weight*2;
+        cout<<"Cost of your shipping is $"<<cost<<endl;
+    }
+    else if (weight >= 5 && kind == "Metal"){
+        cost = weight*4;
+         cout<<"Cost of your shipping is $"<<cost<<endl;
+    }
+    else if (weight >= 10 && kind == "Misc"){
+    cost = weight*3;
+    cout<<"Cost of your shipping is $"<<cost<<endl;;
+    }
+}
+
+void mail::supportNumber(){
+    mailservice *tmp = head;
+    mailservice *tmp2 = head2;
+    int areaCode;
+    int second;
+    int last;
+    string phoneNumber;
+
+
+
+    while (tmp->next != NULL){
+        areaCode = rand() % 800 + 100;
+        string strArea = static_cast<ostringstream*>( &(ostringstream() << areaCode) )->str();
+        second = rand() % 800 + 100; //std::to_string(second);
+        string strSecond = static_cast<ostringstream*>( &(ostringstream() << second) )->str();
+        last = rand() % 8000 + 1000; //std::to_string(last);
+        string strLast = static_cast<ostringstream*>( &(ostringstream() << last) )->str();
+
+        phoneNumber = "(" + strArea + ") " + strSecond + "-" + strLast;
+
+        tmp->phone = phoneNumber;
+        tmp2->phone = phoneNumber;
+        tmp = tmp->next;
+    }
+}
+
+mailservice* mail::search(string lookCity){
+    mailservice *tmp = head;
+    while (tmp->next != NULL){
+        if (tmp->cityname == lookCity){
+            return tmp;
+        }
+        tmp = tmp->next;
+    }
 }

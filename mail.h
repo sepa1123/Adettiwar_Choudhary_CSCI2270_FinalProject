@@ -9,6 +9,7 @@ struct mailservice{
     std::string package;
     mailservice * next;
     mailservice * previous;
+    std::string phone;
 
 
     mailservice(){};
@@ -27,17 +28,22 @@ class mail
     public:
         mail();
         ~mail();
+        void build2();
         void build();
-        void track();
         void addCity(std::string, std::string);
-        void ship(char *);
         void printNetwork();
+        void deleteCity(std::string);
+        void deleteNetwork();
+        void costfast(std::string, int);
+        void costnormal(std::string,int);
+        void supportNumber();
+        mailservice* search(std::string);
+
     protected:
     private:
         mailservice *head;
         mailservice *tail;
-
+        mailservice *head2;
 };
 
 #endif // MAIL_H
-

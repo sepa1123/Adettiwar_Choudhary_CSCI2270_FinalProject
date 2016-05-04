@@ -65,7 +65,7 @@ int main()
                     else if (y == 4)
                     {
                         cout<<"Enter a city to be deleted"<<endl;
-                        cin>>newCity;
+                        getline(cin, newCity);
                         service.deleteCity(newCity);
                     }
 

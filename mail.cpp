@@ -138,20 +138,25 @@ void mail::build2()
 void mail::addCity(std::string newCity, std::string previousCity)
 {
     mailservice *temps =head;
-    while(temps->next != NULL){
-
+    mailservice *newmail = new mailservice;
+    while(temps != NULL && temps->cityname != previousCity)
+        {
+        temps = temps->next;
+        }
         if(temps->cityname == previousCity){
-            break;
+            newmail -> cityname = newCity;
+            newmail -> next = temps->next;
+            temps->next = newmail;
+        }
         }
 
-        temps = temps -> next;
-    }
-    mailservice *k = new mailservice(newCity,temps, temps->next, "");
-    temps->next = k;
-
-}
 
 void mail::printNetwork(){
+    if(head==NULL)
+    {
+        std::cout << "Empty list or Cleared" << std::endl;
+    }
+    else{
     cout<<"Route map for delivery"<<endl;
     cout<<"NULL <- ";
     mailservice *temp = head;
@@ -164,54 +169,62 @@ void mail::printNetwork(){
     cout<<temp->cityname<<" ->";
     cout<<"NULL"<<endl;
     cout<<"=================="<<endl;
+    }
 }
 
-void mail::deleteCity(string cityNameDelete)
+void mail::deleteCity(std::string cityNameDelete)
 {
-    mailservice *delCity = NULL;
-    mailservice *searchCity = head;
-    bool found = false;
-    while(!found and searchCity != NULL){
-        if(searchCity->cityname == cityNameDelete){
-            found = true;
-        }else{
-            searchCity = searchCity->next;
-        }
+    mailservice *current = head;
+    int x = 0;
 
-    }
-    if(found == true){
-        if(searchCity == head){
-            delCity = head;
-            head = head->next;
-            head->previous = NULL;
-            delete delCity;
-        }else{
-            searchCity->previous->next = searchCity->next;
-            searchCity->next->previous = searchCity->previous;
-            delete searchCity;
-        }
-    }else{
-        cout<<cityNameDelete<<"not found"<<endl;
+    while(current != NULL && current -> cityname != cityNameDelete)
+    {
+        current = current -> next;
     }
 
+
+    if(current == NULL)
+    {
+        std::cout<<cityNameDelete <<"Not Found"<<std::endl;
+        x = 1;
+    }
+
+    if(x == 0 && current == head)
+    {
+        head = head->next;
+        head->previous = NULL;
+        delete current;
+    }
+
+    if(x==0 && current == tail)
+    {
+        tail = tail->previous;
+        tail->next=NULL;
+        delete current;
+    }
+
+    if(x == 0)
+    {
+        current->previous->next = current->next;
+        current->next->previous = current->previous;
+        delete current;
+    }
 }
 
 void mail::deleteNetwork()
 {
-    mailservice* temps = head;
-    mailservice*temps2 = head->next;
-
-    while(temps != NULL)
+    mailservice *current = head;
+    mailservice *nextCity = current->next;
+    while (current->next != NULL)
     {
-        cout<<temps->cityname<<" deleted"<<endl;
-        delete temps;
-        temps2 = temps->next;
+        std::cout<< "deleting " << current -> cityname << std::endl;
+        delete current;
+        current = nextCity;
+        nextCity = nextCity->next;
     }
-    cout<<temps->cityname<<" deleted"<<endl;
-    delete temps;
+    std::cout << "deleting " << current -> cityname << std::endl;
     head = NULL;
-
-    cout<<"There is no network"<<endl;
+    std::cout << "Network Cleared " << std::endl;
 }
 
 void mail::costfast(string kind, int weight){
